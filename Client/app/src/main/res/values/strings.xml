@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Client</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="send">Send</string>
+    <string name="registration_of_a_new_employee">Регистрация нового сотрудника</string>
+    <string name="device_id">Device ID:</string>
+    <string name="surname">Фамилия</string>
+    <string name="name">Имя</string>
+    <string name="patronymic">Отчество</string>
+    <string name="birthdate">Дата рождения (ДД.ММ.ГГГГ)</string>
+    <string name="phone_number">Номер телефона (+************)</string>
+    <string name="address">Адрес</string>
+    <string name="complete_registration">Завершить регистрацию</string>
+    <string name="begin_work">Начать работу</string>
+    <string name="сomplete_work">Завершить работу</string>
+</resources>
