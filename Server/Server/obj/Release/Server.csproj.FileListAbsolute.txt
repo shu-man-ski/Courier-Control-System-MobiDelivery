@@ -1,0 +1,9 @@
+C:\Users\dimas\Desktop\Course_project\Server\Server\bin\Server.dll.config
+C:\Users\dimas\Desktop\Course_project\Server\Server\bin\Server.dll
+C:\Users\dimas\Desktop\Course_project\Server\Server\bin\Server.pdb
+C:\Users\dimas\Desktop\Course_project\Server\Server\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\dimas\Desktop\Course_project\Server\Server\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\dimas\Desktop\Course_project\Server\Server\obj\Release\Server.csprojResolveAssemblyReference.cache
+C:\Users\dimas\Desktop\Course_project\Server\Server\obj\Release\Server.csproj.CoreCompileInputs.cache
+C:\Users\dimas\Desktop\Course_project\Server\Server\obj\Release\Server.dll
+C:\Users\dimas\Desktop\Course_project\Server\Server\obj\Release\Server.pdb
