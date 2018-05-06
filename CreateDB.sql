@@ -52,7 +52,7 @@ CREATE TABLE [dbo].[Order](
 	[Customer Code]   [int] NOT NULL,
 	[Delivery Code]   [int] NOT NULL,
 	[Courier Code]    [int] NOT NULL,
-	[Cost]            [int] NOT NULL,
+	[Quantity]        [int] NOT NULL,
 	CONSTRAINT [PK_Order] PRIMARY KEY([Order Code] ASC),
 	CONSTRAINT [FK_Product] FOREIGN KEY([Product Code]) REFERENCES [dbo].[Product]([Product Code]),
 	CONSTRAINT [FK_Customer] FOREIGN KEY([Customer Code]) REFERENCES [dbo].[Customer]([Customer Code]),

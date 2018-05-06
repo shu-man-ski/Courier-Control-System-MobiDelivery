@@ -96,6 +96,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="MainForm.aspx" />
+    <Content Include="OrdersController.asmx" />
     <Content Include="SOAPService.asmx" />
     <Content Include="StyleSheet.css" />
     <Content Include="Web.config">
@@ -104,7 +105,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBHelper.cs" />
-    <Compile Include="OrdersController.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="OrdersController.asmx.cs">
+      <DependentUpon>OrdersController.asmx</DependentUpon>
+    </Compile>
     <Compile Include="SOAPService.asmx.cs">
       <DependentUpon>SOAPService.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -123,7 +127,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
