@@ -127,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Service stopped", Toast.LENGTH_SHORT).show();
     }
 
+    public void onClickGetOrders(View view) {
+        RESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
+    }
+
 
     // Возвращает имя текущего пользователя
     protected String getUserName() {
@@ -176,6 +180,11 @@ public class MainActivity extends AppCompatActivity {
     protected void SOAPServiceRequest(String url, String soapAction, String envelope){
         new SOAPServiceRequestTask().execute(url, soapAction, envelope);
     }
+    // Вызов REST сервиса
+    protected void RESTServiceRequest(String url){
+        new RESTServiceRequestTask().execute(url);
+    }
+
 
 
     // AsyncTask для вызова SOAP сервиса
@@ -209,6 +218,61 @@ public class MainActivity extends AppCompatActivity {
                 try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"))) {
                     bw.write(params[2]);
                 }
+
+                /* Execute */
+                responseCode = connection.getResponseCode();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if (connection != null) {
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                        mResponse.setText(br.readLine());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (responseCode == 0) {
+                    mResponse.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Проверьте состояние сети или обратитесь к администратору");
+                } else {
+                    mResponse.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Обратититесь к администратору для решения проблемы");
+                }
+            }
+        }
+    }
+
+    // AsyncTask для вызова REST сервиса
+    @SuppressLint("StaticFieldLeak")
+    public class RESTServiceRequestTask extends AsyncTask<String, Void, Void> {
+
+        private URL url;
+        private HttpURLConnection connection;
+        private int responseCode;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            url = null;
+            connection = null;
+            responseCode = 0;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                /* Headlines */
+                connection.setRequestMethod("GET");
 
                 /* Execute */
                 responseCode = connection.getResponseCode();
