@@ -53,7 +53,12 @@ CREATE TABLE [dbo].[Order](
 	[Delivery Code]   [int] NOT NULL,
 	[Courier Code]    [int] NOT NULL,
 	[Quantity]        [int] NOT NULL,
-	[Status]		  [nvarchar](20) NOT NULL,
+	[Status]		  [nvarchar](50) CHECK([Status] = 'Новый' OR 
+										   [Status] = 'Комплектуется' OR
+										   [Status] = 'В доставке' OR
+										   [Status] = 'Получен клиентом' OR
+										   [Status] = 'Оплачен' OR
+										   [Status] = 'Отменен') DEFAULT 'Новый' NOT NULL,
 	CONSTRAINT [PK_Order] PRIMARY KEY([Order Code] ASC),
 	CONSTRAINT [FK_Product] FOREIGN KEY([Product Code]) REFERENCES [dbo].[Product]([Product Code]),
 	CONSTRAINT [FK_Customer] FOREIGN KEY([Customer Code]) REFERENCES [dbo].[Customer]([Customer Code]),

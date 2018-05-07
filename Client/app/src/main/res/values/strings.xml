@@ -14,13 +14,13 @@
     <string name="complete_registration">Завершить регистрацию</string>
     <string name="begin_work">Начать работу</string>
     <string name="сomplete_work">Завершить работу</string>
-    <string name="get_list_orders">Получить список заказов</string>
-    <string name="product">Товар:</string>
-    <string name="quantity">Количество:</string>
-    <string name="cost">Стоимость:</string>
-    <string name="customer_name">Имя клиента:</string>
-    <string name="customer_address">Адрес:</string>
-    <string name="delivery_date">Дата доставки:</string>
-    <string name="delivery_time">Время:</string>
+    <string name="update_list_orders">Обновить список заказов</string>
+    <string name="product">Товар: </string>
+    <string name="quantity">Количество: </string>
+    <string name="cost">Стоимость: </string>
+    <string name="customer_name">Имя клиента: </string>
+    <string name="customer_address">Адрес: </string>
+    <string name="delivery_date">Дата доставки: </string>
+    <string name="delivery_time">Время: </string>
     <string name="order_number">№ заказа</string>
 </resources>

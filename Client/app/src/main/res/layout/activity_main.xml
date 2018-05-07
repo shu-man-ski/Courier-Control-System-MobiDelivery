@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="15dp"
+    android:background="@drawable/gradient_rectangle"
     tools:context="com.shm.dim.client.MainActivity">
 
     <RelativeLayout
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorWhite"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
@@ -29,6 +30,14 @@
         android:layout_width="match_parent"
         android:layout_height="300dp" />
 
+    <Spinner
+        android:id="@+id/order_status"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/white_rectangle"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -36,14 +45,20 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_centerHorizontal="true">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/get_list_orders"
+                android:text="@string/update_list_orders"
                 android:onClick="onClickGetOrders"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Отправить"
+                android:onClick="onClickSend"/>
 
         </LinearLayout>
 

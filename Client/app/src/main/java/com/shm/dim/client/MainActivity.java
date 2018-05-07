@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private TextView mHeader;
     private RecyclerView mOrdersList;
+    private Spinner mOrderStatus;
+    private String[] orderStatuses = {"Новый", "Комплектуется", "В доставке", "Получен клиентом", "Оплачен", "Отменен"};
+    private String selectedOrderCode;
     private BroadcastReceiver broadcastReceiver;
 
 
@@ -74,8 +78,11 @@ public class MainActivity extends AppCompatActivity {
 
         mHeader = findViewById(R.id.header);
         mOrdersList = findViewById(R.id.orders_list);
+        mOrderStatus = findViewById(R.id.order_status);
 
         enablePermissions();
+
+        initOrderStatusSpinner();
 
         dbHelper = new LocalDBHelper(this);
         db = dbHelper.getWritableDatabase();
@@ -83,9 +90,8 @@ public class MainActivity extends AppCompatActivity {
         //Демонстрация работы регистрации пользователя при первой установке приложения
         //dbHelper.onUpgrade(db, 1, 1);
 
-        /* Если количество строк в таблице USER <= 0 — пользователь не зарегестрирован,
-        то запускается Activity для регистрации */
-        if(getCountLineOnUserTable(db) <= 0) {
+        /* Если пользователь не зарегестрирован — запускается Activity для регистрации */
+        if(!userIsRegistered()) {
             startActivity(new Intent(MainActivity.this, RegistrationActivity.class));
         }
     }
@@ -133,11 +139,43 @@ public class MainActivity extends AppCompatActivity {
         RESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
     }
 
+    public void onClickSend(View view) {
+
+    }
+
+
+    // Инициализация Spinner'а массивом статусов заказа
+    protected void initOrderStatusSpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, orderStatuses);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mOrderStatus.setAdapter(adapter);
+    }
+
+    // Является ли пользователь зарегистрированным
+    protected boolean userIsRegistered() {
+        // Если количество строк в таблице USER <= 0 — пользователь не зарегестрирован
+        return (getCountLineOnUserTable(db) > 0);
+    }
+
+    // Возвращает количество существующих записей в таблице USER
+    protected int getCountLineOnUserTable(SQLiteDatabase db) {
+        if (db == null || !db.isOpen()) {
+            return 0;
+        }
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM USER;", null);
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return 0;
+        }
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
 
     // Возвращает имя текущего пользователя
     protected String getUserName() {
         String name = "";
-        Cursor cursor = db.rawQuery("select Name from USER", null);
+        Cursor cursor = db.rawQuery("SELECT Name FROM USER", null);
         if (cursor.moveToFirst()) {
             int nameIndex = cursor.getColumnIndex("Name");
             do {
@@ -161,21 +199,6 @@ public class MainActivity extends AppCompatActivity {
                 "   </soap:Body>" +
                 "</soap:Envelope>";
         return envelope;
-    }
-
-    // Возвращает количество существующих записей в таблице USER
-    protected int getCountLineOnUserTable(SQLiteDatabase db) {
-        if (db == null || !db.isOpen()) {
-            return 0;
-        }
-        Cursor cursor = db.rawQuery("select count(*) from USER;", null);
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            return 0;
-        }
-        int count = cursor.getInt(0);
-        cursor.close();
-        return count;
     }
 
     // Вызов SOAP сервиса
@@ -317,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
                     OrdersDataAdapter adapter = new OrdersDataAdapter(context, orders, new OrdersDataAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(Order order) {
-                           Toast.makeText(context, "Код заказа:" + order.getOrderCode(), Toast.LENGTH_SHORT).show();
+                            selectedOrderCode = order.getOrderCode();
                         }
                     });
                     mOrdersList.setAdapter(adapter);
