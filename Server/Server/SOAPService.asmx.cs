@@ -32,7 +32,7 @@ namespace Server
                 if (DBHelper.Query("(SELECT count(*) FROM Courier WHERE[Device ID] = '" + deviceID + "')")[0] == "1")
                 {
                     query = "INSERT INTO CurrentCoordinatesOfCourier([Courier Code], [Latitude], [Longitude], [Speed]) " +
-                        "VALUES ((SELECT[Courier Code] FROM Courier WHERE[Device ID] = '" + deviceID + "'), '" + longitude + "', '" + latitude + "', '" + speed + "')";
+                        "VALUES ((SELECT[Courier Code] FROM Courier WHERE[Device ID] = '" + deviceID + "'), '" + latitude + "', '" + longitude + "', '" + speed + "')";
                     DBHelper.Query(query);
 
                     return "INSERT success";

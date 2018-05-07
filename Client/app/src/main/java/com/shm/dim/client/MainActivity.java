@@ -14,26 +14,33 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private String deviceID;
     private LocalDBHelper dbHelper;
     private SQLiteDatabase db;
-    private TextView mHeader, mResponse;
+    private TextView mHeader;
+    private RecyclerView mOrdersList;
     private BroadcastReceiver broadcastReceiver;
 
 
@@ -66,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         deviceID = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         mHeader = findViewById(R.id.header);
-        mResponse = findViewById(R.id.response);
+        mOrdersList = findViewById(R.id.orders_list);
 
         enablePermissions();
 
@@ -111,23 +118,18 @@ public class MainActivity extends AppCompatActivity {
         if(broadcastReceiver != null) {
             unregisterReceiver(broadcastReceiver);
         }
+
+        Intent intent = new Intent(getApplicationContext(), GPSService.class);
+        stopService(intent);
+
         super.onDestroy();
     }
 
 
-    public void onClickBeginWork(View view) {
-        Intent intent = new Intent(getApplicationContext(), GPSService.class);
-        Toast.makeText(getApplicationContext(), "Service started", Toast.LENGTH_SHORT).show();
-        startService(intent);
-    }
-
-    public void onClickCompleteWork(View view) {
-        Intent intent = new Intent(getApplicationContext(), GPSService.class);
-        stopService(intent);
-        Toast.makeText(getApplicationContext(), "Service stopped", Toast.LENGTH_SHORT).show();
-    }
-
     public void onClickGetOrders(View view) {
+        Intent intent = new Intent(getApplicationContext(), GPSService.class);
+        startService(intent);
+
         RESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
     }
 
@@ -178,11 +180,19 @@ public class MainActivity extends AppCompatActivity {
 
     // Вызов SOAP сервиса
     protected void SOAPServiceRequest(String url, String soapAction, String envelope){
-        new SOAPServiceRequestTask().execute(url, soapAction, envelope);
+        new SOAPServiceRequestTask(MainActivity.this.getApplicationContext()).execute(url, soapAction, envelope);
     }
+
     // Вызов REST сервиса
     protected void RESTServiceRequest(String url){
-        new RESTServiceRequestTask().execute(url);
+        new RESTServiceRequestTask(MainActivity.this.getApplicationContext()).execute(url);
+    }
+
+    // JSON парсер
+    protected ArrayList<Order> getOrdersFromResponseString(String response) {
+        ArrayList<Order>orders;
+        orders = new Gson().fromJson(response, new TypeToken<ArrayList<Order>>() {}.getType());
+        return orders;
     }
 
 
@@ -194,6 +204,12 @@ public class MainActivity extends AppCompatActivity {
         private URL url;
         private HttpURLConnection connection;
         private int responseCode;
+        private final Context context;
+
+        SOAPServiceRequestTask(Context context) {
+            this.context = context;
+        }
+
 
         @Override
         protected void onPreExecute() {
@@ -234,17 +250,13 @@ public class MainActivity extends AppCompatActivity {
 
             if (connection != null) {
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                        mResponse.setText(br.readLine());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
                 } else if (responseCode == 0) {
-                    mResponse.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Проверьте состояние сети или обратитесь к администратору");
+                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Проверьте состояние сети или обратитесь к администратору", Toast.LENGTH_LONG).show();
                 } else {
-                    mResponse.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Обратититесь к администратору для решения проблемы");
+                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Обратититесь к администратору для решения проблемы", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -257,6 +269,11 @@ public class MainActivity extends AppCompatActivity {
         private URL url;
         private HttpURLConnection connection;
         private int responseCode;
+        private final Context context;
+
+        RESTServiceRequestTask(Context context) {
+            this.context = context;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -289,17 +306,27 @@ public class MainActivity extends AppCompatActivity {
 
             if (connection != null) {
                 if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String response = null;
                     try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                        mResponse.setText(br.readLine());
+                        response = br.readLine();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    ArrayList<Order> orders = getOrdersFromResponseString(response);
+
+                    OrdersDataAdapter adapter = new OrdersDataAdapter(context, orders, new OrdersDataAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Order order) {
+                           Toast.makeText(context, "Код заказа:" + order.getOrderCode(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    mOrdersList.setAdapter(adapter);
                 } else if (responseCode == 0) {
-                    mResponse.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Проверьте состояние сети или обратитесь к администратору");
+                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Проверьте состояние сети или обратитесь к администратору", Toast.LENGTH_LONG).show();
                 } else {
-                    mResponse.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Обратититесь к администратору для решения проблемы");
+                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Обратититесь к администратору для решения проблемы", Toast.LENGTH_LONG).show();
                 }
             }
         }

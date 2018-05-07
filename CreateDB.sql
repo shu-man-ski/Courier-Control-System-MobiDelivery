@@ -53,6 +53,7 @@ CREATE TABLE [dbo].[Order](
 	[Delivery Code]   [int] NOT NULL,
 	[Courier Code]    [int] NOT NULL,
 	[Quantity]        [int] NOT NULL,
+	[Status]		  [nvarchar](20) NOT NULL,
 	CONSTRAINT [PK_Order] PRIMARY KEY([Order Code] ASC),
 	CONSTRAINT [FK_Product] FOREIGN KEY([Product Code]) REFERENCES [dbo].[Product]([Product Code]),
 	CONSTRAINT [FK_Customer] FOREIGN KEY([Customer Code]) REFERENCES [dbo].[Customer]([Customer Code]),
@@ -62,10 +63,11 @@ CREATE TABLE [dbo].[Order](
 
 ----------------------------------------- CREATE TABLE [CurrentCoordinatesOfCourier] -------------------
 CREATE TABLE [dbo].[CurrentCoordinatesOfCourier](
-	[Courier Code]   [int] UNIQUE NOT NULL,
+	[Courier Code]   [int] NOT NULL,
 	[Latitude]       [nvarchar](50) NOT NULL,
 	[Longitude]      [nvarchar](50) NOT NULL,
 	[Speed]          [nvarchar](50) NULL,
+	CONSTRAINT [PK_CourierCode] PRIMARY KEY([Courier Code] ASC),
 	CONSTRAINT [FK_CourierCode] FOREIGN KEY([Courier Code]) REFERENCES [dbo].[Courier]([Courier Code])
 )ON [PRIMARY]
 

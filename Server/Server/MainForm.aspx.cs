@@ -38,7 +38,7 @@ namespace Server
                 GMarker[] markers = new GMarker[countOfCouriers];
                 GInfoWindow[] windows = new GInfoWindow[countOfCouriers];
 
-                string[] deviceId = DBHelper.Query("SELECT [Courier Code] FROM CurrentCoordinatesOfCourier").ToArray();
+                string[] courierCode = DBHelper.Query("SELECT [Courier Code] FROM CurrentCoordinatesOfCourier").ToArray();
                 string[] latitude = DBHelper.Query("SELECT [Latitude] FROM CurrentCoordinatesOfCourier").ToArray();
                 string[] longitude = DBHelper.Query("SELECT [Longitude] FROM CurrentCoordinatesOfCourier").ToArray();
                 string[] speed = DBHelper.Query("SELECT [Speed] FROM CurrentCoordinatesOfCourier").ToArray();
@@ -51,7 +51,7 @@ namespace Server
                     convertedSpeed[i] = Convert.ToDouble(speed[i].Replace(".", ","));
 
                     markers[i] = new GMarker(new GLatLng(convertedLatitude[i], convertedLongitude[i]));
-                    windows[i] = new GInfoWindow(markers[i], GetGInfoWindowString(deviceId[i], speed[i]), true);
+                    windows[i] = new GInfoWindow(markers[i], GetGInfoWindowString(courierCode[i], speed[i]), true);
                     MainGMap.Add(windows[i]);
                 }
             }
