@@ -45,10 +45,14 @@ namespace Server
 
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        // PUT api/<controller>?orderCode=5
+        // body: =abc
+        public void Put(int orderCode, [FromBody]string status)
         {
-
+            string query = "UPDATE [Order] " +
+                "SET[Status] = '" + status + "' " +
+                "WHERE[Order Code] = '"+ orderCode + "'";
+            DBHelper.Query(query);
         }
 
         // DELETE api/<controller>/5

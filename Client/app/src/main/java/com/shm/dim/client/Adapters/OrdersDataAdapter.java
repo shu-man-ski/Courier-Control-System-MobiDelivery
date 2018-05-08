@@ -64,7 +64,7 @@ public class OrdersDataAdapter extends RecyclerView.Adapter<OrdersDataAdapter.Vi
 
 
     public interface OnItemClickListener {
-        void onItemClick(Order order);
+        void onItemClick(Order order, int position);
     }
 
 
@@ -98,7 +98,7 @@ public class OrdersDataAdapter extends RecyclerView.Adapter<OrdersDataAdapter.Vi
                     // Выбранный элемент — true
                     selectItems[positin] = true;
                     // Передаем order в onItemClick адаптера
-                    OrdersDataAdapter.this.listener.onItemClick(order);
+                    OrdersDataAdapter.this.listener.onItemClick(order, positin);
                     // Вызов onBindViewHolder
                     notifyDataSetChanged();
                 }

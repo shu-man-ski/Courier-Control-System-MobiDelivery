@@ -148,11 +148,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), GPSService.class);
         startService(intent);
 
-        RESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
+        GetRESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
     }
 
     public void onClickSend(View view) {
-        Toast.makeText(this, "send", Toast.LENGTH_SHORT).show();
+        PutRESTServiceRequest("http://192.168.43.234:46001/api/orders?orderCode=" + selectedOrderCode,
+                "=" + mOrderStatus.getSelectedItem());
     }
 
 
@@ -219,8 +220,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Вызов REST сервиса
-    protected void RESTServiceRequest(String url){
-        new RESTServiceRequestTask(MainActivity.this.getApplicationContext()).execute(url);
+    protected void GetRESTServiceRequest(String url){
+        new GetRESTServiceRequestTask(MainActivity.this.getApplicationContext()).execute(url);
+    }
+
+    // Вызов REST сервиса
+    protected void PutRESTServiceRequest(String url, String body){
+        new PutRESTServiceRequestTask(MainActivity.this.getApplicationContext()).execute(url, body);
     }
 
     // JSON парсер
@@ -229,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
         orders = new Gson().fromJson(response, new TypeToken<ArrayList<Order>>() {}.getType());
         return orders;
     }
-
 
 
     // AsyncTask для вызова SOAP сервиса
@@ -299,14 +304,14 @@ public class MainActivity extends AppCompatActivity {
 
     // AsyncTask для вызова REST сервиса
     @SuppressLint("StaticFieldLeak")
-    public class RESTServiceRequestTask extends AsyncTask<String, Void, Void> {
+    public class GetRESTServiceRequestTask extends AsyncTask<String, Void, Void> {
 
         private URL url;
         private HttpURLConnection connection;
         private int responseCode;
         private final Context context;
 
-        RESTServiceRequestTask(Context context) {
+        GetRESTServiceRequestTask(Context context) {
             this.context = context;
         }
 
@@ -325,6 +330,7 @@ public class MainActivity extends AppCompatActivity {
                 connection = (HttpURLConnection) url.openConnection();
                 /* Headlines */
                 connection.setRequestMethod("GET");
+
 
                 /* Execute */
                 responseCode = connection.getResponseCode();
@@ -351,14 +357,87 @@ public class MainActivity extends AppCompatActivity {
 
                     OrdersDataAdapter adapter = new OrdersDataAdapter(context, orders, new OrdersDataAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(Order order) {
+                        public void onItemClick(Order order, int position) {
                             selectedOrderCode = order.getOrderCode();
                             mOrderStatus.setEnabled(true);
                             mSend.setEnabled(true);
-                            Toast.makeText(context, selectedOrderCode, Toast.LENGTH_SHORT).show();
+
+                            // В Spinner устанавливаем статус выбранного заказа
+                            for(int i = 0; i < orderStatuses.length; i++) {
+                                if (order.getStatus().equals(orderStatuses[i])) {
+                                    mOrderStatus.setSelection(i);
+                                }
+                            }
                         }
                     });
                     mOrdersList.setAdapter(adapter);
+                } else if (responseCode == 0) {
+                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Проверьте состояние сети или обратитесь к администратору", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
+                            "Обратититесь к администратору для решения проблемы", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    // AsyncTask для вызова REST сервиса
+    @SuppressLint("StaticFieldLeak")
+    public class PutRESTServiceRequestTask extends AsyncTask<String, Void, Void> {
+
+        private URL url;
+        private HttpURLConnection connection;
+        private int responseCode;
+        private final Context context;
+
+        PutRESTServiceRequestTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            url = null;
+            connection = null;
+            responseCode = 0;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                /* Headlines */
+                connection.setDoOutput(true);
+                connection.setRequestMethod("PUT");
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                /* Body */
+                try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"))) {
+                    bw.write(params[1]);
+                }
+
+                /* Execute */
+                responseCode = connection.getResponseCode();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if (connection != null) {
+                if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 204) {
+                    Toast.makeText(context, "Статус заказа был успешно отправлен", Toast.LENGTH_LONG).show();
+                    // Обновляем список заказов
+                    GetRESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
+                    mOrderStatus.setEnabled(false);
+                    mSend.setEnabled(false);
                 } else if (responseCode == 0) {
                     Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
                             "Проверьте состояние сети или обратитесь к администратору", Toast.LENGTH_LONG).show();
