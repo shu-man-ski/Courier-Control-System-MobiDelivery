@@ -1,4 +1,4 @@
-package com.shm.dim.client;
+package com.shm.dim.client.Activitys;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -9,14 +9,13 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
+import com.shm.dim.client.DBHelper.LocalDBHelper;
+import com.shm.dim.client.R;
+
 import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -73,7 +72,7 @@ public class RegistrationActivity extends AppCompatActivity {
             phoneNumber = mPhoneNumber.getText().toString();
             address = mAddress.getText().toString();
 
-            if (checkFormatDate(birthdate) && checkFormatPhoneNumber(phoneNumber)) {
+            if (formatDateIsCorrect(birthdate) && formatPhoneNumberIsCorrect(phoneNumber)) {
                 String envelope = getSOAPEnvelopeString(deviceID, surname, name, patronymic,
                         birthdate, phoneNumber, address);
 
@@ -117,13 +116,13 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     // Проверка формата введенного номера телефона
-    private boolean checkFormatPhoneNumber(String str) {
+    private boolean formatPhoneNumberIsCorrect(String str) {
         String reg = "^[+][0-9]{10,13}$";
         return str.matches(reg);
     }
 
     // Проверка формата введенной даты рождения
-    private boolean checkFormatDate(String str) {
+    private boolean formatDateIsCorrect(String str) {
         String DATE_FORMAT = "dd.MM.yyyy";
         SimpleDateFormat df = new SimpleDateFormat(DATE_FORMAT);
         df.setLenient(false);

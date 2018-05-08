@@ -1,67 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="15dp"
-    android:background="@drawable/gradient_rectangle"
-    tools:context="com.shm.dim.client.MainActivity">
+    android:background="@drawable/background_gradient_selector"
+    tools:context="com.shm.dim.client.Activitys.MainActivity">
 
     <RelativeLayout
+        android:id="@+id/first_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp">
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:paddingBottom="10dp"
+            android:textSize="20sp"
             android:textColor="@color/colorWhite"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/orders_list"
-        app:layoutManager="LinearLayoutManager"
+    <LinearLayout
+        android:id="@+id/second_row"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/first_row"
+        android:layout_above="@id/third_row">
 
-    <Spinner
-        android:id="@+id/order_status"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/orders_list"
+            app:layoutManager="LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/third_row"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/white_rectangle"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerHorizontal="true">
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/status_of_selected_order"/>
 
-            <Button
-                android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/order_status"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/spinner_selector"
+            android:layout_marginBottom="5dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/update_list_orders"
-                android:onClick="onClickGetOrders"/>
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Отправить"
-                android:onClick="onClickSend"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/update_list_orders"
+                    android:background="@drawable/button_selector"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:onClick="onClickGetOrders"/>
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/send"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send"
+                    android:background="@drawable/button_selector"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:onClick="onClickSend"/>
 
-    </RelativeLayout>
+            </LinearLayout>
 
-</LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

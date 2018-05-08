@@ -1,4 +1,4 @@
-package com.shm.dim.client;
+package com.shm.dim.client.Services;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -16,6 +16,7 @@ public class GPSService extends Service {
     private LocationListener locationListener;
     private LocationManager locationManager;
     private Intent locationUpdateIntent;
+
 
     @Override
     public IBinder onBind(Intent intent) {

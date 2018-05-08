@@ -1,4 +1,4 @@
-package com.shm.dim.client;
+package com.shm.dim.client.Models;
 
 public class Order {
 

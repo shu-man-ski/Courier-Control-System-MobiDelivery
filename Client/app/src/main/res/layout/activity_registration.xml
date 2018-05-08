@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp"
-    tools:context="com.shm.dim.client.RegistrationActivity">
+    tools:context="com.shm.dim.client.Activitys.RegistrationActivity">
 
     <ScrollView
         android:layout_width="match_parent"

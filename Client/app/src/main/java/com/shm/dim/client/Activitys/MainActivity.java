@@ -1,4 +1,4 @@
-package com.shm.dim.client;
+package com.shm.dim.client.Activitys;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,15 +16,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shm.dim.client.Services.GPSService;
+import com.shm.dim.client.DBHelper.LocalDBHelper;
+import com.shm.dim.client.Models.Order;
+import com.shm.dim.client.Adapters.OrdersDataAdapter;
+import com.shm.dim.client.R;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mHeader;
     private RecyclerView mOrdersList;
     private Spinner mOrderStatus;
+    private Button mSend;
     private String[] orderStatuses = {"Новый", "Комплектуется", "В доставке", "Получен клиентом", "Оплачен", "Отменен"};
     private String selectedOrderCode;
     private BroadcastReceiver broadcastReceiver;
@@ -79,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
         mHeader = findViewById(R.id.header);
         mOrdersList = findViewById(R.id.orders_list);
         mOrderStatus = findViewById(R.id.order_status);
+        mOrderStatus.setEnabled(false);
+        mSend = findViewById(R.id.send);
+        mSend.setEnabled(false);
 
         enablePermissions();
 
@@ -133,6 +141,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickGetOrders(View view) {
+        selectedOrderCode = "";
+        mOrderStatus.setEnabled(false);
+        mSend.setEnabled(false);
+
         Intent intent = new Intent(getApplicationContext(), GPSService.class);
         startService(intent);
 
@@ -140,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickSend(View view) {
-
+        Toast.makeText(this, "send", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -341,6 +353,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(Order order) {
                             selectedOrderCode = order.getOrderCode();
+                            mOrderStatus.setEnabled(true);
+                            mSend.setEnabled(true);
+                            Toast.makeText(context, selectedOrderCode, Toast.LENGTH_SHORT).show();
                         }
                     });
                     mOrdersList.setAdapter(adapter);

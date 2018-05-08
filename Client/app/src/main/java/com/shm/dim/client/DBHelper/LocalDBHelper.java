@@ -1,4 +1,4 @@
-package com.shm.dim.client;
+package com.shm.dim.client.DBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
