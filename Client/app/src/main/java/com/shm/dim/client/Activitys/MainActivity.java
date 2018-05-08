@@ -238,7 +238,11 @@ public class MainActivity extends AppCompatActivity {
     // JSON парсер
     protected ArrayList<Order> getOrdersFromResponseString(String response) {
         ArrayList<Order>orders;
-        orders = new Gson().fromJson(response, new TypeToken<ArrayList<Order>>() {}.getType());
+        if(!response.equals("[]")) {
+            orders = new Gson().fromJson(response, new TypeToken<ArrayList<Order>>() {}.getType());
+        } else {
+            orders = null;
+        }
         return orders;
     }
 
@@ -251,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
         private HttpURLConnection connection;
         private int responseCode;
         private final Context context;
+
 
         SOAPServiceRequestTask(Context context) {
             this.context = context;
@@ -311,9 +316,11 @@ public class MainActivity extends AppCompatActivity {
         private int responseCode;
         private final Context context;
 
+
         GetRESTServiceRequestTask(Context context) {
             this.context = context;
         }
+
 
         @Override
         protected void onPreExecute() {
@@ -353,25 +360,30 @@ public class MainActivity extends AppCompatActivity {
                     }
                     ArrayList<Order> orders = getOrdersFromResponseString(response);
 
-                    OrdersDataAdapter adapter = new OrdersDataAdapter(context, orders, new OrdersDataAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Order order, int position) {
-                            selectedOrderCode = order.getOrderCode();
-                            mOrderStatus.setEnabled(true);
-                            mSend.setEnabled(true);
+                    if(orders != null) {
+                        OrdersDataAdapter adapter = new OrdersDataAdapter(context, orders, new OrdersDataAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Order order, int position) {
+                                selectedOrderCode = order.getOrderCode();
+                                mOrderStatus.setEnabled(true);
+                                mSend.setEnabled(true);
 
-                            // В Spinner устанавливаем статус выбранного заказа
-                            for(int i = 0; i < orderStatuses.length; i++) {
-                                if (order.getStatus().equals(orderStatuses[i])) {
-                                    mOrderStatus.setSelection(i);
+                                // В Spinner устанавливаем статус выбранного заказа
+                                for (int i = 0; i < orderStatuses.length; i++) {
+                                    if (order.getStatus().equals(orderStatuses[i])) {
+                                        mOrderStatus.setSelection(i);
+                                    }
                                 }
                             }
-                        }
-                    });
-                    mOrdersList.setAdapter(adapter);
+                        });
+                        mOrdersList.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(context, "Список ваших заказов пуст",
+                                Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode)
-                            , Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode),
+                            Toast.LENGTH_LONG).show();
                 }
             }
             mProgressBar.setVisibility(View.GONE);
@@ -387,9 +399,11 @@ public class MainActivity extends AppCompatActivity {
         private int responseCode;
         private final Context context;
 
+
         PutRESTServiceRequestTask(Context context) {
             this.context = context;
         }
+
 
         @Override
         protected void onPreExecute() {

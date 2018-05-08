@@ -1,6 +1,7 @@
 package com.shm.dim.client.Activitys;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -10,7 +11,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.shm.dim.client.DBHelper.LocalDBHelper;
 import com.shm.dim.client.R;
@@ -26,7 +28,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private LocalDBHelper dbHelper;
     private SQLiteDatabase db;
-    private TextView mInfoText;
+    private ProgressBar mProgressBar;
     private EditText mDeviceID, mSurname, mName, mPatronymic,
         mBirthdate, mPhoneNumber, mAddress;
     private String deviceID, surname, name, patronymic,
@@ -44,7 +46,7 @@ public class RegistrationActivity extends AppCompatActivity {
         dbHelper = new LocalDBHelper(this);
         db = dbHelper.getWritableDatabase();
 
-        mInfoText = findViewById(R.id.info_text);
+        mProgressBar = findViewById(R.id.progress);
         mDeviceID = findViewById(R.id.device_id);
         mSurname = findViewById(R.id.surname);
         mName = findViewById(R.id.name);
@@ -75,7 +77,7 @@ public class RegistrationActivity extends AppCompatActivity {
             if (formatDateIsCorrect(birthdate) && formatPhoneNumberIsCorrect(phoneNumber)) {
                 String envelope = getSOAPEnvelopeString(deviceID, surname, name, patronymic,
                         birthdate, phoneNumber, address);
-
+                mProgressBar.setVisibility(View.VISIBLE);
                 SOAPServiceRequest("http://192.168.43.234:46001/SOAPService.asmx",
                         "http://192.168.43.234/RegisterCourier",
                         envelope);
@@ -144,7 +146,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     // Вызов SOAP сервиса
     protected void SOAPServiceRequest(String url, String soapAction, String envelope){
-        new SOAPServiceRequestTask().execute(url, soapAction, envelope);
+        new SOAPServiceRequestTask(RegistrationActivity.this.getApplicationContext()).execute(url, soapAction, envelope);
     }
 
 
@@ -155,6 +157,12 @@ public class RegistrationActivity extends AppCompatActivity {
         private URL url;
         private HttpURLConnection connection;
         private int responseCode;
+        private final Context context;
+
+
+        SOAPServiceRequestTask(Context context) {
+            this.context = context;
+        }
 
 
         @Override
@@ -181,8 +189,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     bw.write(params[2]);
                 }
 
-                mInfoText.setText("Идет отправка, ожидайте...");
-
                 /* Execute */
                 responseCode = connection.getResponseCode();
             } catch (Exception e) {
@@ -195,21 +201,17 @@ public class RegistrationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             if (connection != null) {
                 connection.disconnect();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     dbHelper.addUser(db, deviceID, surname, name, patronymic, birthdate, phoneNumber, address);
-                    mInfoText.setText("");
                     finish();
-                } else if (responseCode == 0) {
-                    mInfoText.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Проверьте состояние сети или обратитесь к администратору");
                 } else {
-                    mInfoText.setText("Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                        "Обратититесь к администратору для решения проблемы");
+                    Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode)
+                            , Toast.LENGTH_LONG).show();
                 }
             }
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }
