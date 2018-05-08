@@ -48,7 +48,7 @@ public class OrdersDataAdapter extends RecyclerView.Adapter<OrdersDataAdapter.Vi
         holder.mTime.setText(order.getTime());
 
         if(selectItems[position]) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#a8d1e0"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#b3deff"));
         }
         else {
             holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));

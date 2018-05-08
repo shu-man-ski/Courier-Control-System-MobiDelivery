@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private LocalDBHelper dbHelper;
     private SQLiteDatabase db;
     private TextView mHeader;
+    private ProgressBar mProgressBar;
     private RecyclerView mOrdersList;
     private Spinner mOrderStatus;
     private Button mSend;
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         mHeader = findViewById(R.id.header);
         mOrdersList = findViewById(R.id.orders_list);
+        mProgressBar = findViewById(R.id.progress);
         mOrderStatus = findViewById(R.id.order_status);
         mOrderStatus.setEnabled(false);
         mSend = findViewById(R.id.send);
@@ -145,13 +148,16 @@ public class MainActivity extends AppCompatActivity {
         mOrderStatus.setEnabled(false);
         mSend.setEnabled(false);
 
+        // Запуск сервиса получения местоположения
         Intent intent = new Intent(getApplicationContext(), GPSService.class);
         startService(intent);
 
+        mProgressBar.setVisibility(View.VISIBLE);
         GetRESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
     }
 
     public void onClickSend(View view) {
+        mProgressBar.setVisibility(View.VISIBLE);
         PutRESTServiceRequest("http://192.168.43.234:46001/api/orders?orderCode=" + selectedOrderCode,
                 "=" + mOrderStatus.getSelectedItem());
     }
@@ -287,16 +293,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             if (connection != null) {
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                } else if (responseCode == 0) {
-                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Проверьте состояние сети или обратитесь к администратору", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Обратититесь к администратору для решения проблемы", Toast.LENGTH_LONG).show();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    Toast.makeText(context, "Проблема с сетью. Не удалось отправить данные о местоположении",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -331,7 +331,6 @@ public class MainActivity extends AppCompatActivity {
                 /* Headlines */
                 connection.setRequestMethod("GET");
 
-
                 /* Execute */
                 responseCode = connection.getResponseCode();
             } catch (Exception e) {
@@ -344,7 +343,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             if (connection != null) {
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     String response = null;
@@ -371,14 +369,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     mOrdersList.setAdapter(adapter);
-                } else if (responseCode == 0) {
-                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Проверьте состояние сети или обратитесь к администратору", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Обратититесь к администратору для решения проблемы", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode)
+                            , Toast.LENGTH_LONG).show();
                 }
             }
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -430,22 +426,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             if (connection != null) {
-                if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 204) {
+                if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 204/*204 - получен ответ без тела*/) {
                     Toast.makeText(context, "Статус заказа был успешно отправлен", Toast.LENGTH_LONG).show();
                     // Обновляем список заказов
                     GetRESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
                     mOrderStatus.setEnabled(false);
                     mSend.setEnabled(false);
-                } else if (responseCode == 0) {
-                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Проверьте состояние сети или обратитесь к администратору", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(context, "Код ошибки: " + String.valueOf(responseCode) + ";\n" +
-                            "Обратититесь к администратору для решения проблемы", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode),
+                            Toast.LENGTH_LONG).show();
                 }
             }
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }
