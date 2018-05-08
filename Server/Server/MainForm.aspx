@@ -27,9 +27,11 @@
             </asp:UpdatePanel>
         </div>
         <div class="second-column">
-            <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+            <asp:Label ID="Label1" runat="server" Text="MobiDelivery" ForeColor="CadetBlue" Font-Size="Large"></asp:Label>
             <br />
-            <asp:Button ID="Button1" runat="server" Text="Add Marker" OnClick="Button1_Click" />
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/ico.png" Width="100%" Height="100%" />
+            <br />
+            <footer >&copy; Copyright 2018 Dima Shumanski</footer> 
         </div>
     </form>
 </body>
