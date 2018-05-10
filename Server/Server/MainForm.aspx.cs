@@ -50,21 +50,47 @@ namespace Server
                     convertedLongitude[i] = Convert.ToDouble(longitude[i].Replace(".", ","));
                     convertedSpeed[i] = Convert.ToDouble(speed[i].Replace(".", ","));
 
+                    // Заказы курьера
+                    string[] courierOrders = DBHelper.Query("SELECT [Order Code], [Status] FROM [Order]"+
+                        "WHERE[Courier Code] = '" + courierCode[i] + "'").ToArray();
+
                     markers[i] = new GMarker(new GLatLng(convertedLatitude[i], convertedLongitude[i]));
-                    windows[i] = new GInfoWindow(markers[i], GetGInfoWindowString(courierCode[i], speed[i]), true);
+                    windows[i] = new GInfoWindow(markers[i], GetGInfoWindowString(courierCode[i], courierOrders, speed[i]), true);
                     MainGMap.Add(windows[i]);
                 }
             }
         }
 
-        protected string GetGInfoWindowString(string deviceId, string speed)
+        protected string GetGInfoWindowString(string courierCode, string[] courierOrders, string speed)
         {
+            int counOfOrders = courierOrders.Length / 2;
+            string orders = "<tr>" +
+                                "<th><b>Код заказа</b></th>" +
+                                "<th><b>Cтатус</b></th>" +
+                            "</<tr>"; ;
+            for(int i = 0; i < counOfOrders; i++)
+            {
+                orders += "<tr>" +
+                            "<td align=\"center\"><i>" + courierOrders[(i * 2) + 0] + "</i></td>" +
+                            "<td align=\"center\"><i>" + courierOrders[(i * 2) + 1] + "</i></td>" +
+                          "</<tr>";
+            }
+
             string infoWindow =
                 "<center>" +
-                    "<b>Код курьера: </b>" + "<i>" + deviceId + "</i>" + 
-                    "<br/>" +
-                    "<b>Скорость движения: </b>" + "<i>" + speed + "</i>" + 
+                    "<table>" +
+                        "<tr>" +
+                            "<td><b>Код курьера: </b></td>" +
+                            "<td><i>" + courierCode + "</i></td>" +
+                        "</<tr>" +
+                        "<tr>" +
+                            "<td><b>Скорость движения: </b></td>" +
+                            "<td><i>" + speed + "</i></td>" +
+                        "</<tr>" +
+                        orders +
+                    "</table>" +
                 "</center>";
+
             return infoWindow;
         }
 
@@ -74,11 +100,6 @@ namespace Server
             MainGMap.reset();
             initMap();
             updateMarkerOnMap();
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            
         }
     }
 }
