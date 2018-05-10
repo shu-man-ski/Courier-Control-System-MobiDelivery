@@ -11,18 +11,35 @@ namespace Server
         public string RegisterCourier(string deviceID, string surname, string name,
             string patronymic, string birthdate, string phoneNumber, string address)
         {
-            string query = "INSERT INTO Courier([Device ID], [Surname], [Name], [Patronymic], [Birthdate], [Phone Number], [Address])" +
-                "VALUES ('" + deviceID + "', '" + surname +"', '" + name + "', '" + patronymic + "', '" + birthdate + "', '" + phoneNumber + "', '" + address + "')";
-            DBHelper.Query(query);
+            string query = "SELECT count(*) FROM Courier " +
+                                "WHERE [Device ID] = '" + deviceID + "'";
 
-            return "INSERT success";
+            // Если в таблице нет записи для данного deviceID, то INSERT,
+            // если такой deviceID существует — UPDATE
+            if (DBHelper.Query(query)[0] == "0")
+            {
+                query = "INSERT INTO Courier([Device ID], [Surname], [Name], [Patronymic], [Birthdate], [Phone Number], [Address])" +
+                "VALUES ('" + deviceID + "', '" + surname + "', '" + name + "', '" + patronymic + "', '" + birthdate + "', '" + phoneNumber + "', '" + address + "')";
+                DBHelper.Query(query);
+
+                return "INSERT success";
+            }
+            else
+            {
+                query = "UPDATE Courier " +
+                   "SET [Surname] = '" + surname + "', [Name] = '" + name + "', [Patronymic] = '" + patronymic + "', [Birthdate] = '" + birthdate + "', [Phone Number] = '" + phoneNumber + "', [Address] = '" + address + "'" +
+                   "WHERE [Device ID] = '" + deviceID + "'";
+                DBHelper.Query(query);
+
+                return "UPDATE success";
+            }          
         }
         
         [WebMethod]
         public string Coordinates(string deviceID, string latitude, string longitude, string speed)
         {
             string query = "SELECT count(*) FROM CurrentCoordinatesOfCourier " +
-                                "WHERE[Courier Code] = (SELECT[Courier Code] FROM Courier WHERE[Device ID] = '" + deviceID + "')";
+                                "WHERE [Courier Code] = (SELECT[Courier Code] FROM Courier WHERE[Device ID] = '" + deviceID + "')";
 
             // Если в таблице нет записи координат курьера, с таким deviceID, то INSERT,
             // если курьер, с таким deviceID, существует — UPDATE
@@ -46,7 +63,7 @@ namespace Server
             {
                 query = "UPDATE CurrentCoordinatesOfCourier " +
                     "SET [Latitude] = '" + latitude + "', [Longitude] = '" + longitude + "', [Speed] = '" + speed + "' " +
-                    "WHERE[Courier Code] = (SELECT[Courier Code] FROM Courier WHERE[Device ID] = '" + deviceID + "')";
+                    "WHERE [Courier Code] = (SELECT[Courier Code] FROM Courier WHERE[Device ID] = '" + deviceID + "')";
                 DBHelper.Query(query);
 
                 return "UPDATE success";

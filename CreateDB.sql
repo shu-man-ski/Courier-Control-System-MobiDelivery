@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[Courier](
 	[Birthdate]      [nvarchar](50) NOT NULL,
 	[Phone Number]   [nvarchar](50) NOT NULL,
 	[Address]        [nvarchar](50) NOT NULL,
+	CONSTRAINT AK_DeviceID UNIQUE([Device ID]),
 	CONSTRAINT [PK_Courier] PRIMARY KEY ([Courier Code] ASC)
 )ON [PRIMARY]
 

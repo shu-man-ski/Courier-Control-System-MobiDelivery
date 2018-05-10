@@ -111,7 +111,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         mHeader.setText("Здравствуйте, " + getUserName());
+
+        ArrayList<Order> orders = dbHelper.getOrders(db);
+        if(orders.size() != 0) {
+            OrdersDataAdapter adapter = new OrdersDataAdapter(MainActivity.this.getApplicationContext(), orders, new OrdersDataAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Order order, int position) {
+                    selectedOrderCode = order.getOrderCode();
+                    mOrderStatus.setEnabled(true);
+                    mSend.setEnabled(true);
+
+                    // В Spinner устанавливаем статус выбранного заказа
+                    for (int i = 0; i < orderStatuses.length; i++) {
+                        if (order.getStatus().equals(orderStatuses[i])) {
+                            mOrderStatus.setSelection(i);
+                        }
+                    }
+                }
+            });
+            mOrdersList.setAdapter(adapter);
+        } else {
+            Toast.makeText(MainActivity.this.getApplicationContext(), "Список Ваших заказов пуст\n Нажмите кнопку обновить для проверки наличия Ваших заказов",
+                    Toast.LENGTH_LONG).show();
+        }
+
         if(broadcastReceiver == null) {
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
@@ -359,28 +384,8 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     ArrayList<Order> orders = getOrdersFromResponseString(response);
-
-                    if(orders != null) {
-                        OrdersDataAdapter adapter = new OrdersDataAdapter(context, orders, new OrdersDataAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Order order, int position) {
-                                selectedOrderCode = order.getOrderCode();
-                                mOrderStatus.setEnabled(true);
-                                mSend.setEnabled(true);
-
-                                // В Spinner устанавливаем статус выбранного заказа
-                                for (int i = 0; i < orderStatuses.length; i++) {
-                                    if (order.getStatus().equals(orderStatuses[i])) {
-                                        mOrderStatus.setSelection(i);
-                                    }
-                                }
-                            }
-                        });
-                        mOrdersList.setAdapter(adapter);
-                    } else {
-                        Toast.makeText(context, "Список ваших заказов пуст",
-                                Toast.LENGTH_LONG).show();
-                    }
+                    dbHelper.addOrders(db, orders);
+                    MainActivity.this.onResume();
                 } else {
                     Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode),
                             Toast.LENGTH_LONG).show();
