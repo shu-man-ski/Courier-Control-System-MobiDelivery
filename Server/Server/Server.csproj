@@ -94,6 +94,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="OrdersForm.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\ico.png" />
     <Content Include="MainForm.aspx" />
@@ -105,6 +106,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrdersForm.aspx.cs">
+      <DependentUpon>OrdersForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdersForm.aspx.designer.cs">
+      <DependentUpon>OrdersForm.aspx</DependentUpon>
+    </Compile>
     <Compile Include="DBHelper.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="OrdersController.asmx.cs">
