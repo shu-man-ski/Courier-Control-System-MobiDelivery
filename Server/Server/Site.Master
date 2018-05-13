@@ -1,0 +1,38 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Server.Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <main>
+                <aside>
+                    <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/ico.png" Width="100%" />
+                    <br />
+                    <ul class="navbar">
+                        <li><a href="MainForm.aspx">Главная</a></li>
+                        <li><a href="#">Товары</a></li>
+                        <li><a href="#">Заказчики</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Курьеры</a></li>
+                        <li><a href="OrdersForm.aspx">Заказы</a></li>
+                    </ul>
+                    <br />
+                    <footer>&copy; 2018 Dima Shumanski</footer>
+                </aside>
+                <section>
+                    <asp:ContentPlaceHolder ID="body" runat="server">
+                    </asp:ContentPlaceHolder>
+                </section>
+            </main>
+        </div>
+    </form>
+</body>
+</html>
