@@ -128,6 +128,8 @@ namespace Server
             string query = "INSERT INTO [Order]([Product Code], [Customer Code], [Delivery Code], [Courier Code], [Quantity], [Status]) " +
                         "VALUES ('" + productCode + "', '" + customerCode + "', '" + deliveryCode + "', '" + courierCode + "', '" + quantity + "', '" + status + "')";
             DBHelper.Query(query);
+
+            Response.Redirect(Request.RawUrl);
         }
     }
 }
