@@ -6,8 +6,8 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <asp:Table ID="Table1" runat="server" Width="100%" Style="padding: 15px" BorderWidth="1">
-        <asp:TableRow runat="server">
+    <asp:Table ID="Table1" runat="server" Width="100%" Style="padding: 15px; border-spacing: 0; border: 1px solid; border-radius: 2px;">
+        <asp:TableHeaderRow runat="server">
             <asp:TableCell runat="server">
                        <b>Код заказа</b>
             </asp:TableCell>
@@ -29,7 +29,7 @@
             <asp:TableCell runat="server">
                        <b>Статус заказа</b>
             </asp:TableCell>
-        </asp:TableRow>
+        </asp:TableHeaderRow>
     </asp:Table>
     <br />
     <asp:Button ID="Button1" runat="server" Text="Добавить" style="float: right; background-color:#E0E0E0;" OnClick="AddOrder_Click" />

@@ -6,7 +6,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <asp:Table ID="Table1" runat="server" Width="100%" Style="padding: 15px" BorderWidth="1">
+    <asp:Table ID="Table1" runat="server" Width="100%" Style="padding: 15px; border-spacing: 0; border: 1px solid; border-radius: 2px;">
         <asp:TableRow runat="server">
             <asp:TableCell runat="server">
                        <b>Код доставки</b>

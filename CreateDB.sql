@@ -53,7 +53,7 @@ CREATE TABLE [dbo].[Order](
 	[Customer Code]   [int] NOT NULL,
 	[Delivery Code]   [int] NOT NULL,
 	[Courier Code]    [int] NOT NULL,
-	[Quantity]        [int] NOT NULL,
+	[Quantity]        [int] DEFAULT 1 NOT NULL,
 	[Status]		  [nvarchar](50) CHECK([Status] = 'Новый' OR 
 										   [Status] = 'Комплектуется' OR
 										   [Status] = 'В доставке' OR
