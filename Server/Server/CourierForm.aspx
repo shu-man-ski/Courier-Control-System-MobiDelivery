@@ -1,36 +1,37 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="OrdersForm.aspx.cs" Inherits="Server.AddOrderForm"
-    MasterPageFile="~/Site.Master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CourierForm.aspx.cs" Inherits="Server.CourierForm" 
+    MasterPageFile="~/Site.Master"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <title>MobiDelivery | Заказы</title>
+    <title>MobiDelivery | Курьеры</title>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <asp:Table ID="Table1" runat="server" Width="100%" Style="padding: 15px" BorderWidth="1">
         <asp:TableRow runat="server">
             <asp:TableCell runat="server">
-                       <b>Код заказа</b>
-            </asp:TableCell>
-            <asp:TableCell runat="server">
-                       <b>Код продукта</b>
-            </asp:TableCell>
-            <asp:TableCell runat="server">
-                       <b>Код заказчика</b>
-            </asp:TableCell>
-            <asp:TableCell runat="server">
-                       <b>Код доставки</b>
-            </asp:TableCell>
-            <asp:TableCell runat="server">
                        <b>Код курьера</b>
             </asp:TableCell>
             <asp:TableCell runat="server">
-                      <b>Количество товара</b>
+                       <b>ID устройства</b>
             </asp:TableCell>
             <asp:TableCell runat="server">
-                       <b>Статус заказа</b>
+                       <b>Фамилия</b>
+            </asp:TableCell>
+            <asp:TableCell runat="server">
+                       <b>Имя</b>
+            </asp:TableCell>
+            <asp:TableCell runat="server">
+                       <b>Отчество</b>
+            </asp:TableCell>
+            <asp:TableCell runat="server">
+                      <b>Дата рождения</b>
+            </asp:TableCell>
+            <asp:TableCell runat="server">
+                       <b>Номер телефона</b>
+            </asp:TableCell>
+            <asp:TableCell runat="server">
+                       <b>Адрес</b>
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>
-    <br />
-    <asp:Button ID="Button1" runat="server" Text="Добавить" style="float: right; background-color:#E0E0E0;" OnClick="AddOrder_Click" />
 </asp:Content>

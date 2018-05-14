@@ -86,6 +86,10 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="CourierForm.aspx" />
+    <Content Include="CustomerForm.aspx" />
+    <Content Include="DeliveryForm.aspx" />
+    <Content Include="ProductForm.aspx" />
     <Content Include="Site.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -107,6 +111,27 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CourierForm.aspx.cs">
+      <DependentUpon>CourierForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CourierForm.aspx.designer.cs">
+      <DependentUpon>CourierForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerForm.aspx.cs">
+      <DependentUpon>CustomerForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerForm.aspx.designer.cs">
+      <DependentUpon>CustomerForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryForm.aspx.cs">
+      <DependentUpon>DeliveryForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryForm.aspx.designer.cs">
+      <DependentUpon>DeliveryForm.aspx</DependentUpon>
+    </Compile>
     <Compile Include="OrdersForm.aspx.cs">
       <DependentUpon>OrdersForm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -118,6 +143,13 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="OrdersController.asmx.cs">
       <DependentUpon>OrdersController.asmx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductForm.aspx.cs">
+      <DependentUpon>ProductForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductForm.aspx.designer.cs">
+      <DependentUpon>ProductForm.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

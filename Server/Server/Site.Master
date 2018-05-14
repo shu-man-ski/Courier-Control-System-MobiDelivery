@@ -18,10 +18,10 @@
                     <br />
                     <ul class="navbar">
                         <li><a href="MainForm.aspx">Главная</a></li>
-                        <li><a href="#">Товары</a></li>
-                        <li><a href="#">Заказчики</a></li>
-                        <li><a href="#">Доставка</a></li>
-                        <li><a href="#">Курьеры</a></li>
+                        <li><a href="ProductForm.aspx">Товары</a></li>
+                        <li><a href="CustomerForm.aspx">Заказчики</a></li>
+                        <li><a href="DeliveryForm.aspx">Доставка</a></li>
+                        <li><a href="CourierForm.aspx">Курьеры</a></li>
                         <li><a href="OrdersForm.aspx">Заказы</a></li>
                     </ul>
                     <br />

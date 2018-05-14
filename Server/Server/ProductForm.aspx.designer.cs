@@ -10,7 +10,7 @@
 namespace Server {
     
     
-    public partial class AddOrderForm {
+    public partial class ProductForm {
         
         /// <summary>
         /// Table1 элемент управления.
@@ -20,14 +20,5 @@ namespace Server {
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Table Table1;
-        
-        /// <summary>
-        /// Button1 элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
     }
 }

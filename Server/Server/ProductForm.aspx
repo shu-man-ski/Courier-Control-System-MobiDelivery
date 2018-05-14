@@ -1,36 +1,28 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="OrdersForm.aspx.cs" Inherits="Server.AddOrderForm"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ProductForm.aspx.cs" Inherits="Server.ProductForm"
     MasterPageFile="~/Site.Master" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <title>MobiDelivery | Заказы</title>
+    <title>MobiDelivery | Товары</title>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <asp:Table ID="Table1" runat="server" Width="100%" Style="padding: 15px" BorderWidth="1">
         <asp:TableRow runat="server">
             <asp:TableCell runat="server">
-                       <b>Код заказа</b>
-            </asp:TableCell>
-            <asp:TableCell runat="server">
                        <b>Код продукта</b>
             </asp:TableCell>
             <asp:TableCell runat="server">
-                       <b>Код заказчика</b>
+                       <b>Название</b>
             </asp:TableCell>
             <asp:TableCell runat="server">
-                       <b>Код доставки</b>
+                       <b>Описание</b>
             </asp:TableCell>
             <asp:TableCell runat="server">
-                       <b>Код курьера</b>
+                       <b>Цена</b>
             </asp:TableCell>
             <asp:TableCell runat="server">
-                      <b>Количество товара</b>
-            </asp:TableCell>
-            <asp:TableCell runat="server">
-                       <b>Статус заказа</b>
+                       <b>Количество</b>
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>
-    <br />
-    <asp:Button ID="Button1" runat="server" Text="Добавить" style="float: right; background-color:#E0E0E0;" OnClick="AddOrder_Click" />
 </asp:Content>
