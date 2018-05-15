@@ -205,10 +205,12 @@ public class RegistrationActivity extends AppCompatActivity {
                 connection.disconnect();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     dbHelper.addUser(db, deviceID, surname, name, patronymic, birthdate, phoneNumber, address);
+                    Toast.makeText(context, "Данные пользователя сохранены",
+                            Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode)
-                            , Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Проблема с сетью. Код ошибки: " + String.valueOf(responseCode),
+                            Toast.LENGTH_LONG).show();
                 }
             }
             mProgressBar.setVisibility(View.GONE);
