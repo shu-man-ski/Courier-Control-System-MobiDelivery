@@ -50,7 +50,7 @@ namespace Server
         public void Put(int orderCode, [FromBody]string status)
         {
             string query = "UPDATE [Order] " +
-                "SET[Status] = '" + status + "' " +
+                "SET[Status] = N'" + status + "' " +
                 "WHERE[Order Code] = '"+ orderCode + "'";
             DBHelper.Query(query);
         }

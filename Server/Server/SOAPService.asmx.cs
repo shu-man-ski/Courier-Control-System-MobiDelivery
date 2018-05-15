@@ -2,7 +2,7 @@
 
 namespace Server
 {
-    [WebService(Namespace = "http://192.168.43.234/")]
+    [WebService(Namespace = "http://mobi-delivery.somee.com")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     public class SOAPService : WebService
@@ -12,23 +12,23 @@ namespace Server
             string patronymic, string birthdate, string phoneNumber, string address)
         {
             string query = "SELECT count(*) FROM Courier " +
-                                "WHERE [Device ID] = '" + deviceID + "'";
+                                "WHERE [Device ID] = N'" + deviceID + "'";
 
             // Если в таблице нет записи для данного deviceID, то INSERT,
             // если такой deviceID существует — UPDATE
             if (DBHelper.Query(query)[0] == "0")
             {
-                query = "INSERT INTO Courier([Device ID], [Surname], [Name], [Patronymic], [Birthdate], [Phone Number], [Address])" +
-                "VALUES ('" + deviceID + "', '" + surname + "', '" + name + "', '" + patronymic + "', '" + birthdate + "', '" + phoneNumber + "', '" + address + "')";
+                query = "INSERT INTO [Courier] ([Device ID], [Surname], [Name], [Patronymic], [Birthdate], [Phone Number], [Address]) " +
+                "VALUES (N'" + deviceID + "', N'" + surname + "', N'" + name + "', N'" + patronymic + "', N'" + birthdate + "', N'" + phoneNumber + "', N'" + address + "')";
                 DBHelper.Query(query);
 
                 return "INSERT success";
             }
             else
             {
-                query = "UPDATE Courier " +
-                   "SET [Surname] = '" + surname + "', [Name] = '" + name + "', [Patronymic] = '" + patronymic + "', [Birthdate] = '" + birthdate + "', [Phone Number] = '" + phoneNumber + "', [Address] = '" + address + "'" +
-                   "WHERE [Device ID] = '" + deviceID + "'";
+                query = "UPDATE [Courier] " +
+                   "SET [Surname] = N'" + surname + "', [Name] = N'" + name + "', [Patronymic] = N'" + patronymic + "', [Birthdate] = N'" + birthdate + "', [Phone Number] = N'" + phoneNumber + "', [Address] = N'" + address + "' " +
+                   "WHERE [Device ID] = N'" + deviceID + "'";
                 DBHelper.Query(query);
 
                 return "UPDATE success";

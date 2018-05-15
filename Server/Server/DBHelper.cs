@@ -25,7 +25,7 @@ namespace Server
             List<string> data = new List<string>();
             try
             {
-                command = new SqlCommand("USE [Shop] " + query, connection);
+                command = new SqlCommand(query, connection);
                 adapter = new SqlDataAdapter(command);
                 connection.Open();
 

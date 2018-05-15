@@ -78,8 +78,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 String envelope = getSOAPEnvelopeString(deviceID, surname, name, patronymic,
                         birthdate, phoneNumber, address);
                 mProgressBar.setVisibility(View.VISIBLE);
-                SOAPServiceRequest("http://192.168.43.234:46001/SOAPService.asmx",
-                        "http://192.168.43.234/RegisterCourier",
+                SOAPServiceRequest("http://mobi-delivery.somee.com/SOAPService.asmx",
+                        "http://mobi-delivery.somee.com/RegisterCourier",
                         envelope);
             } else {
                 createDialogMsg("Проверьте правильность ввода телефона и даты рождения");
@@ -96,7 +96,7 @@ public class RegistrationActivity extends AppCompatActivity {
         String envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
                 "   <soap:Body>" +
-                "       <RegisterCourier xmlns=\"http://192.168.43.234/\">" +
+                "       <RegisterCourier xmlns=\"http://mobi-delivery.somee.com\">" +
                 "           <deviceID>" + deviceID + "</deviceID>" +
                 "           <surname>" + surname +"</surname>" +
                 "           <name>" + name + "</name>" +

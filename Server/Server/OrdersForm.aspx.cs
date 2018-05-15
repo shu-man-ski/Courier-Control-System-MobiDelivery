@@ -100,14 +100,10 @@ namespace Server
 
             // [Status]
             tc = new TableCell();
-            dropDownList[4] = new DropDownList();
-            string[] status = { "Новый", "Комплектуется", "В доставке", "Получен клиентом", "Оплачен", "Отменен" };
-            for (int j = 0; j < status.Length; j++)
-            {
-                dropDownList[4].Items.Add(status[j]);
-            }
-            dropDownList[4].Width = 130;
-            tc.Controls.Add(dropDownList[4]);
+            text = new TextBox();
+            text.Width = 130;
+            text.Enabled = false;
+            tc.Controls.Add(text);
             tr.Cells.Add(tc);
 
 
@@ -116,17 +112,16 @@ namespace Server
 
         protected void AddOrder_Click(object sender, EventArgs e)
         {
-            string productCode, customerCode, deliveryCode, courierCode, quantity, status;
+            string productCode, customerCode, deliveryCode, courierCode, quantity;
 
             productCode = dropDownList[0].SelectedValue;
             customerCode = dropDownList[1].SelectedValue;
             deliveryCode = dropDownList[2].SelectedValue;
             courierCode = dropDownList[3].SelectedValue;
             quantity = textBox.Text;
-            status = dropDownList[4].SelectedValue;
 
-            string query = "INSERT INTO [Order]([Product Code], [Customer Code], [Delivery Code], [Courier Code], [Quantity], [Status]) " +
-                        "VALUES ('" + productCode + "', '" + customerCode + "', '" + deliveryCode + "', '" + courierCode + "', '" + quantity + "', '" + status + "')";
+            string query = "INSERT INTO [Order]([Product Code], [Customer Code], [Delivery Code], [Courier Code], [Quantity]) " +
+                        "VALUES ('" + productCode + "', '" + customerCode + "', '" + deliveryCode + "', '" + courierCode + "', '" + quantity + "')";
             DBHelper.Query(query);
 
             Response.Redirect(Request.RawUrl);

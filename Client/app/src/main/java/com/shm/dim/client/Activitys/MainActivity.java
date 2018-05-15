@@ -146,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
                             intent.getExtras().get("longitude").toString(),
                             intent.getExtras().get("speed").toString());
 
-                    SOAPServiceRequest("http://192.168.43.234:46001/SOAPService.asmx",
-                            "http://192.168.43.234/Coordinates",
+                    SOAPServiceRequest("http://mobi-delivery.somee.com/SOAPService.asmx",
+                            "http://mobi-delivery.somee.com/Coordinates",
                             envelope);
                 }
             };
@@ -178,12 +178,12 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
 
         mProgressBar.setVisibility(View.VISIBLE);
-        GetRESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
+        GetRESTServiceRequest("http://mobi-delivery.somee.com/api/orders?deviceId=" + deviceID);
     }
 
     public void onClickSend(View view) {
         mProgressBar.setVisibility(View.VISIBLE);
-        PutRESTServiceRequest("http://192.168.43.234:46001/api/orders?orderCode=" + selectedOrderCode,
+        PutRESTServiceRequest("http://mobi-delivery.somee.com/api/orders?orderCode=" + selectedOrderCode,
                 "=" + mOrderStatus.getSelectedItem());
     }
 
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         String envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
                 "   <soap:Body>" +
-                "       <Coordinates xmlns=\"http://192.168.43.234/\">" +
+                "       <Coordinates xmlns=\"http://mobi-delivery.somee.com\">" +
                 "           <deviceID>" + deviceID + "</deviceID>" +
                 "           <latitude>" + latitude + "</latitude>" +
                 "           <longitude>" + longitude + "</longitude>" +
@@ -449,7 +449,7 @@ public class MainActivity extends AppCompatActivity {
                 if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 204/*204 - получен ответ без тела*/) {
                     Toast.makeText(context, "Статус заказа был успешно отправлен", Toast.LENGTH_LONG).show();
                     // Обновляем список заказов
-                    GetRESTServiceRequest("http://192.168.43.234:46001/api/orders?deviceId=" + deviceID);
+                    GetRESTServiceRequest("http://mobi-delivery.somee.com/api/orders?deviceId=" + deviceID);
                     mOrderStatus.setEnabled(false);
                     mSend.setEnabled(false);
                 } else {

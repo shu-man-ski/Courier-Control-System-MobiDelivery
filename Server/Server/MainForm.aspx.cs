@@ -46,9 +46,9 @@ namespace Server
                 for (int i = 0; i < countOfCouriers; i++)
                 {
                     // Преобразование в double с заменой символа запятой на точку
-                    convertedLatitude[i] = Convert.ToDouble(latitude[i].Replace(".", ","));
-                    convertedLongitude[i] = Convert.ToDouble(longitude[i].Replace(".", ","));
-                    convertedSpeed[i] = Convert.ToDouble(speed[i].Replace(".", ","));
+                    convertedLatitude[i] = Convert.ToDouble(latitude[i]);
+                    convertedLongitude[i] = Convert.ToDouble(longitude[i]);
+                    convertedSpeed[i] = Convert.ToDouble(speed[i]);
 
                     // Заказы курьера
                     string[] courierOrders = DBHelper.Query("SELECT [Order Code], [Status] FROM [Order]"+
