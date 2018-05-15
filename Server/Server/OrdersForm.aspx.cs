@@ -33,7 +33,7 @@ namespace Server
         protected void InitDropDownLists()
         {
             tr = new TableRow();
-            dropDownList = new DropDownList[5];
+            dropDownList = new DropDownList[4];
 
             // [Order Code]
             tc = new TableCell();
